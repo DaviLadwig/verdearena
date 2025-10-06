@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>VerdeArena — Agendamento</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <h1 class="brand">VerdeArena</h1>
+      <p class="tag">Reserve seu campo • Futebol & Arena de Areia</p>
+    </div>
+  </header>
+
+  <main class="container main">
+    <section class="controls card">
+      <div class="row">
+        <label>
+          Data
+          <input id="dateInput" type="date" />
+        </label>
+
+        <label>
+          Tipo de Arena
+          <select id="typeSelect">
+            <option value="futebol">Futebol (grama)</option>
+            <option value="areia">Arena de Areia (vôlei)</option>
+          </select>
+        </label>
+
+        <label>
+          Arena
+          <select id="arenaSelect"></select>
+        </label>
+      </div>
+    </section>
+
+    <section class="availability card">
+      <h2>Horários disponíveis</h2>
+      <div id="slotsGrid" class="slots-grid" aria-live="polite"></div>
+    </section>
+
+    <section class="info card">
+      <p>
+        Ao clicar em um horário você será redirecionado ao WhatsApp com uma
+        mensagem pronta para confirmar o agendamento com o administrador.
+      </p>
+    </section>
+  </main>
+
+  <!-- Modal simples para confirmar (mobile friendly) -->
+  <div id="confirmModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h3 id="modalTitle">Confirmar reserva</h3>
+      <p id="modalInfo"></p>
+
+      <label>
+        Seu nome (apenas para mensagem)
+        <input id="userName" type="text" placeholder="Ex: João" />
+      </label>
+
+      <label>
+        Número para contato (opcional)
+        <input id="userPhone" type="tel" placeholder="+55 99 9 9999-9999" />
+      </label>
+
+      <div class="modal-actions">
+        <button id="cancelBtn" class="btn btn-ghost">Cancelar</button>
+        <button id="whatsappBtn" class="btn btn-primary">Reservar via WhatsApp</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <small>© VerdeArena • Interface temática verde</small>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
