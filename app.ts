@@ -24,7 +24,7 @@ const arenas: Arena[] = [
 
 // Horários padrão (poderia vir de API)
 const times = [
-  '08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00'
+  '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00'
 ];
 
 const STORAGE_KEY = 'verdearena_bookings_v1';
@@ -39,12 +39,12 @@ function getBookings(): Booking[] {
     return [];
   }
 }
-function saveBooking(b: Booking){
+function saveBooking(b: Booking) {
   const arr = getBookings();
   arr.push(b);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
 }
-function isBooked(arenaId: string, dateISO: string, time: string){
+function isBooked(arenaId: string, dateISO: string, time: string) {
   return getBookings().some(b => b.arenaId === arenaId && b.dateISO === dateISO && b.time === time);
 }
 
@@ -67,21 +67,21 @@ let selectedTime: string | null = null;
 let selectedDateISO: string | null = null;
 
 // init
-function init(){
+function init() {
   // default date = hoje
   const today = new Date();
-  dateInput.value = today.toISOString().slice(0,10);
+  dateInput.value = today.toISOString().slice(0, 10);
 
   populateArenas();
   attachListeners();
   renderSlots();
 }
 
-function populateArenas(){
+function populateArenas() {
   arenaSelect.innerHTML = '';
-  const type = typeSelect.value as 'futebol'|'areia';
+  const type = typeSelect.value as 'futebol' | 'areia';
   const filtered = arenas.filter(a => a.type === type);
-  for(const a of filtered){
+  for (const a of filtered) {
     const opt = document.createElement('option');
     opt.value = a.id;
     opt.textContent = a.name;
@@ -89,7 +89,7 @@ function populateArenas(){
   }
 }
 
-function attachListeners(){
+function attachListeners() {
   dateInput.addEventListener('change', () => renderSlots());
   typeSelect.addEventListener('change', () => { populateArenas(); renderSlots(); });
   arenaSelect.addEventListener('change', () => renderSlots());
@@ -98,28 +98,28 @@ function attachListeners(){
   whatsBtn.addEventListener('click', handleWhatsApp);
   // close modal on background click
   modal.addEventListener('click', (e) => {
-    if(e.target === modal) closeModal();
+    if (e.target === modal) closeModal();
   });
 }
 
-function renderSlots(){
+function renderSlots() {
   slotsGrid.innerHTML = '';
   selectedDateISO = dateInput.value;
   const arenaId = arenaSelect.value;
-  if(!arenaId) return;
+  if (!arenaId) return;
   selectedArenaId = arenaId;
 
   // show times
-  for(const t of times){
+  for (const t of times) {
     const slot = document.createElement('div');
     slot.className = 'slot';
     const booked = isBooked(arenaId, selectedDateISO!, t);
-    if(booked) slot.classList.add('booked');
+    if (booked) slot.classList.add('booked');
 
     slot.innerHTML = `<div class="time">${t}</div>
                       <div class="meta">${booked ? 'Reservado' : 'Disponível'}</div>`;
 
-    if(!booked){
+    if (!booked) {
       slot.addEventListener('click', () => openConfirm(arenaId, selectedDateISO!, t));
     }
 
@@ -127,7 +127,7 @@ function renderSlots(){
   }
 }
 
-function openConfirm(arenaId: string, dateISO: string, time: string){
+function openConfirm(arenaId: string, dateISO: string, time: string) {
   selectedArenaId = arenaId;
   selectedDateISO = dateISO;
   selectedTime = time;
@@ -139,14 +139,14 @@ function openConfirm(arenaId: string, dateISO: string, time: string){
   modal.classList.remove('hidden');
 }
 
-function closeModal(){
+function closeModal() {
   modal.classList.add('hidden');
   selectedTime = null;
 }
 
 // Monta mensagem e redireciona para WhatsApp
-function handleWhatsApp(){
-  if(!selectedArenaId || !selectedDateISO || !selectedTime) return;
+function handleWhatsApp() {
+  if (!selectedArenaId || !selectedDateISO || !selectedTime) return;
   const arena = arenas.find(a => a.id === selectedArenaId)!;
   const name = userName.value.trim();
   const phone = userPhone.value.trim();
@@ -165,8 +165,8 @@ function handleWhatsApp(){
   // mensagem WhatsApp (URL-encoded)
   const targetPhone = 'SEU_NUMERO_COMODDD'; // <--- substitua pelo número da arena: ex: 5511999999999
   let message = `Olá! Gostaria de reservar:\n- Arena: ${arena.name}\n- Data: ${selectedDateISO}\n- Horário: ${selectedTime}`;
-  if(name) message += `\n- Nome: ${name}`;
-  if(phone) message += `\n- Telefone: ${phone}`;
+  if (name) message += `\n- Nome: ${name}`;
+  if (phone) message += `\n- Telefone: ${phone}`;
 
   const encoded = encodeURIComponent(message);
 
